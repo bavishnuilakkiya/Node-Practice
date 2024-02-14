@@ -32,13 +32,16 @@ router.get("/restaurants",(req,res) =>{
 // http://localhost:8000/zomato/details?restaurantId=5
 
 
-router.get("/details/:restaurantId",(req,res) =>{
-    let restaurantId= +req.params.restaurantId
+router.get("/filterRestaurants",(req,res) =>{
+    let restaurantId= +req.query.restaurantId
+    let stateId= +req.query.stateId
    
     let query={}
     
     if( restaurantId) { query= { restaurant_id : restaurantId}  }
+    if( stateId) { query= { state_id : stateId}  }
     
+    if( restaurantId & stateId ) { query= { restaurant_id : restaurantId,state_id : stateId} }
 
     Restaurant.find(query,(err,restaurant) => {
         if (err) res.send("Error to fetch the restaurants list", err.message)

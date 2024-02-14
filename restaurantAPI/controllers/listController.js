@@ -79,5 +79,22 @@ router.get("/restaurantMenu",(req,res) =>{
     })
 })
 
+router.post("/menu",(req,res) =>{
+    
+    let menuId = req.body
+    let query={}
+    if(Array.isArray(req.body)){
+        console.log(req.body)
+        query={menu_id: {$in : req.body}} 
+    }
+console.log(query)
+    
+    Menu.find(query,(err,result) => {
+        if (err) res.send("Error to fetch the menu list", err.message)
+        // menu.map((data) => console.log(data))
+        res.send(result)
+    })
+})
+
 
 module.exports = router

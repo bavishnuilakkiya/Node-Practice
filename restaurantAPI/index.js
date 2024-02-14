@@ -8,6 +8,7 @@ const ZomatoController = require("../restaurantAPI/controllers/appController")
 
 const listController = require("../restaurantAPI/controllers/listController")
 
+const userController = require("../restaurantAPI/controllers/authController")
 
 const port = 8000
 
@@ -25,6 +26,8 @@ app.use(express.json())
 app.use("/zomato",ZomatoController)
 
 app.use("/list",listController)
+
+app.use("/auth",userController)
 
 app.listen(port,()=> console.log("Server is connected to port",port))
 
