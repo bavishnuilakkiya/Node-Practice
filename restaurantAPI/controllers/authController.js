@@ -34,12 +34,13 @@ router.post("/login",(req,res) =>{
         if (err) return res.send ({auth:false,token:" Error while login"})
         console.log(user)
         if(!user) return res.send({auth:false,token:"Invalid Credential"})
+        // 
         else {
             const passwordCheck = bcrypt.compareSync( req.body.password,user.password)
-            if (!passwordCheck) return res.send({auth:false,token:"Invalid Credential"}) 
+            if (!passwordCheck) return res.send({auth:false,token:"Invalid Credential"})
             else {
                 let token = jwt.sign({id:user._id},config.secret,{expiresIn:600})
-                res.send( res.send({auth:true,token:token}))
+                res.send({auth:true,token:token})
             }
         }
     })
@@ -49,7 +50,7 @@ router.post("/login",(req,res) =>{
 router.get("/users",(req,res) => {
     User.find({},(err,user) =>{
         if (err) res.send( "Error while getting user data")
-        res.send({Status:"Success",user})
+        res.send(user)
     })
 })
 
@@ -61,12 +62,14 @@ router.get("/userInfo",(req,res) =>{
     else{
     jwt.verify(token,config.secret,(err,user)=> {
         if (err) res.send({auth:false,token:"Invalid Token"})
-        User.findById(user.id,(err,result) => {
-            // if (err) res.send({auth:false,token:"Unable to get the user details"})
-            res.send({auth:true,status:"Success",details:result})
-    })
-})
+        else{
+            User.findById(user.id,(err,result) => {
+                // if (err) res.send({auth:false,token:"Unable to get the user details"})
+                res.send(result)})
+            }    
+        })
     }
 })
+
 
 module.exports = router
